@@ -41,7 +41,7 @@ module.exports = {
 
     try {
       const embed = criarEmbed({
-        tipo: 'primaria',
+        tipo: 'erro',
         titulo: titulo,
         descricao: mensagem,
         imagem: imagem ?? null,

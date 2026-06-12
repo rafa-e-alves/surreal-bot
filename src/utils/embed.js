@@ -4,7 +4,7 @@ const { EmbedBuilder } = require('discord.js');
 const CORES = {
   primaria: 0xE8A317,   // laranja/ouro — identidade do servidor
   sucesso:  0x57F287,   // verde Discord
-  erro:     0xED4245,   // vermelho Discord
+  erro:     0xFF0000,   // vermelho Discord
   aviso:    0xFEE75C,   // amarelo Discord
   info:     0x5865F2,   // roxo blurple Discord
   neutro:   0x2B2D31,   // cinza escuro

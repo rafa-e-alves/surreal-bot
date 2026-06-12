@@ -10,6 +10,11 @@ module.exports = {
       const command = client.commands.get(interaction.commandName);
       if (!command) return;
 
+      // Verifica se o comando está sendo usado no canal correto
+      const { verificarCanal } = require('../utils/canalComandos');
+      const podeUsar = await verificarCanal(interaction);
+      if (!podeUsar) return;
+
       try {
         await command.execute(interaction, client);
       } catch (error) {
@@ -41,6 +46,15 @@ module.exports = {
         }
 
         dados.participants.add(interaction.user.id);
+
+        // Salva participante no JSON
+        const { sorteiosAtivos: _map } = require('../commands/sorteio/sorteio');
+        const fs = require('node:fs'), path = require('node:path');
+        const DB = path.join(__dirname, '../../data/sorteios.json');
+        try {
+          const todos = [..._map.values()].map(s => ({ ...s, participants: [...s.participants] }));
+          fs.writeFileSync(DB, JSON.stringify(todos, null, 2));
+        } catch {}
 
         // Atualiza o embed com a contagem
         const embed = interaction.message.embeds[0].toJSON();

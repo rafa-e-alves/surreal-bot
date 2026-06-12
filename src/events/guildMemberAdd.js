@@ -23,7 +23,7 @@ module.exports = {
     const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
     const urlLoja = process.env.URL_LOJA ?? 'https://loja.redesurreal.com.br';
     const memberCount = member.guild.memberCount;
-    const lojaTexto = `**[loja.redesurreal.com](${urlLoja})**`;
+    const lojaTexto = urlLoja ? `**[loja.redesurreal.com](${urlLoja})**` : '**Em Breve!**';
 
     const embed = new EmbedBuilder()
       .setColor(0xED4245)

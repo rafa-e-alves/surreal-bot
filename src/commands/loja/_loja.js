@@ -58,18 +58,55 @@ const loja = {
 };
 
 // ──────────────────────────────────────────────
-//  /cupom
+//  /cupom — público (só listar)
 // ──────────────────────────────────────────────
 const cupom = {
   data: new SlashCommandBuilder()
     .setName('cupom')
-    .setDescription('🏷️ Gerencia cupons de desconto da loja')
+    .setDescription('🏷️ Veja os cupons de desconto disponíveis'),
+
+  async execute(interaction) {
+    const cupons = lerCupons().filter(c => {
+      if (!c.expira) return true;
+      const [d, m, a] = c.expira.split('/');
+      return new Date(`${a}-${m}-${d}`) >= new Date();
+    });
+
+    if (cupons.length === 0) {
+      return interaction.reply({
+        embeds: [criarEmbed({
+          tipo: 'info',
+          titulo: '🏷️ Cupons Disponíveis',
+          descricao: 'Nenhum cupom ativo no momento. Fique de olho nas novidades!',
+        })],
+      });
+    }
+
+    const lista = cupons.map(c =>
+      `**\`${c.codigo}\`** — ${c.desconto}% de desconto${c.descricao ? ` | ${c.descricao}` : ''}${c.expira ? ` *(expira ${c.expira})*` : ''}`,
+    ).join('\n');
+
+    await interaction.reply({
+      embeds: [criarEmbed({
+        tipo: 'primaria',
+        titulo: '🏷️ Cupons Disponíveis',
+        descricao: `Use esses códigos na loja para ganhar desconto!\n\n${lista}`,
+      })],
+    });
+  },
+};
+
+// ──────────────────────────────────────────────
+//  /cupom-admin — restrito (criar e remover)
+// ──────────────────────────────────────────────
+const cupomAdmin = {
+  data: new SlashCommandBuilder()
+    .setName('cupom-admin')
+    .setDescription('🏷️ Gerencia cupons de desconto (staff)')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addSubcommand(sub =>
-      sub.setName('listar').setDescription('Veja os cupons disponíveis'))
-    .addSubcommand(sub =>
       sub.setName('criar')
-        .setDescription('Cria um novo cupom (staff)')
+        .setDescription('Cria um novo cupom')
         .addStringOption(opt =>
           opt.setName('codigo').setDescription('Código do cupom (ex: SURREAL10)').setRequired(true))
         .addIntegerOption(opt =>
@@ -77,45 +114,15 @@ const cupom = {
         .addStringOption(opt =>
           opt.setName('descricao').setDescription('Descrição do cupom').setRequired(false))
         .addStringOption(opt =>
-          opt.setName('expira').setDescription('Data de expiração (DD/MM/AAAA) — deixe vazio para sem limite').setRequired(false)))
+          opt.setName('expira').setDescription('Data de expiração (DD/MM/AAAA)').setRequired(false)))
     .addSubcommand(sub =>
       sub.setName('remover')
-        .setDescription('Remove um cupom (staff)')
+        .setDescription('Remove um cupom')
         .addStringOption(opt =>
           opt.setName('codigo').setDescription('Código do cupom a remover').setRequired(true))),
 
   async execute(interaction) {
     const sub = interaction.options.getSubcommand();
-
-    if (sub === 'listar') {
-      const cupons = lerCupons().filter(c => {
-        if (!c.expira) return true;
-        const [d, m, a] = c.expira.split('/');
-        return new Date(`${a}-${m}-${d}`) >= new Date();
-      });
-
-      if (cupons.length === 0) {
-        return interaction.reply({
-          embeds: [criarEmbed({
-            tipo: 'info',
-            titulo: '🏷️ Cupons Disponíveis',
-            descricao: 'Nenhum cupom ativo no momento. Fique de olho nas novidades!',
-          })],
-        });
-      }
-
-      const lista = cupons.map(c =>
-        `**\`${c.codigo}\`** — ${c.desconto}% de desconto${c.descricao ? ` | ${c.descricao}` : ''}${c.expira ? ` *(expira ${c.expira})*` : ''}`,
-      ).join('\n');
-
-      await interaction.reply({
-        embeds: [criarEmbed({
-          tipo: 'primaria',
-          titulo: '🏷️ Cupons Disponíveis',
-          descricao: `Use esses códigos na loja para ganhar desconto!\n\n${lista}`,
-        })],
-      });
-    }
 
     if (sub === 'criar') {
       const codigo = interaction.options.getString('codigo').toUpperCase();
@@ -168,4 +175,4 @@ const cupom = {
   },
 };
 
-module.exports = { loja, cupom };
+module.exports = { loja, cupom, cupomAdmin };

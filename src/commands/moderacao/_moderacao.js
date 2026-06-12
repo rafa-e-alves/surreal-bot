@@ -33,7 +33,7 @@ const ban = {
     try {
       await alvo.ban({ deleteMessageDays: apagar, reason: `${interaction.user.tag}: ${motivo}` });
 
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: 'erro',
           titulo: '🔨 Usuário Banido',
@@ -45,6 +45,7 @@ const ban = {
           ],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
 
       await enviarLog(interaction.guild, 'CANAL_LOGS_MODERACAO', {
         embeds: [embedLog({
@@ -91,7 +92,7 @@ const kick = {
     try {
       await alvo.kick(`${interaction.user.tag}: ${motivo}`);
 
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: 'aviso',
           titulo: '👢 Usuário Expulso',
@@ -102,6 +103,7 @@ const kick = {
           ],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
 
       await enviarLog(interaction.guild, 'CANAL_LOGS_MODERACAO', {
         embeds: [embedLog({
@@ -147,7 +149,7 @@ const unban = {
 
       await interaction.guild.members.unban(userId, `${interaction.user.tag}: ${motivo}`);
 
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: 'sucesso',
           titulo: '✅ Ban Removido',
@@ -158,6 +160,7 @@ const unban = {
           ],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
 
       await enviarLog(interaction.guild, 'CANAL_LOGS_MODERACAO', {
         embeds: [embedLog({
@@ -282,7 +285,7 @@ const lock = {
     await interaction.deferReply();
     try {
       await interaction.channel.permissionOverwrites.edit(everyone, { SendMessages: false });
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: 'erro',
           titulo: '🔒 Canal Travado',
@@ -290,6 +293,7 @@ const lock = {
           fields: [{ name: '👮 Por', value: `${interaction.user}`, inline: true }],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
     } catch (err) {
       console.error(err);
       await erroEphemeral(interaction, 'Não consegui travar o canal.');
@@ -311,7 +315,7 @@ const unlock = {
     await interaction.deferReply();
     try {
       await interaction.channel.permissionOverwrites.edit(everyone, { SendMessages: null });
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: 'sucesso',
           titulo: '🔓 Canal Destravado',
@@ -319,6 +323,7 @@ const unlock = {
           fields: [{ name: '👮 Por', value: `${interaction.user}`, inline: true }],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
     } catch (err) {
       console.error(err);
       await erroEphemeral(interaction, 'Não consegui destravar o canal.');
@@ -349,7 +354,7 @@ const slowmode = {
       const descricao = segundos === 0
         ? 'Modo lento **desativado** neste canal.'
         : `Modo lento definido para **${segundos} segundo(s)** neste canal.`;
-      await interaction.editReply({
+      const _msg = await interaction.editReply({
         embeds: [criarEmbed({
           tipo: segundos === 0 ? 'sucesso' : 'aviso',
           titulo: '🐌 Modo Lento',
@@ -357,6 +362,7 @@ const slowmode = {
           fields: [{ name: '👮 Por', value: `${interaction.user}`, inline: true }],
         })],
       });
+      setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
     } catch (err) {
       console.error(err);
       await erroEphemeral(interaction, 'Não consegui alterar o modo lento.');
