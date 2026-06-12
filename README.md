@@ -12,8 +12,8 @@ Bot oficial do servidor de Minecraft Factions **Rede Surreal**, feito com discor
 
 ### 2. Clone e instale as dependências
 ```bash
-git clone <seu-repo>
-cd rede-surreal-bot
+git clone https://github.com/rafa-e-alves/surreal-bot.git
+cd surreal-bot
 npm install
 ```
 
@@ -21,34 +21,43 @@ npm install
 ```bash
 cp .env.example .env
 ```
-Abra o `.env` e preencha todos os valores:
 
-| Variável | Onde encontrar |
+| Variável | Descrição |
 |---|---|
 | `BOT_TOKEN` | Developer Portal → Bot → Token |
 | `CLIENT_ID` | Developer Portal → Application ID |
-| `GUILD_ID` | Discord → clique direito no servidor → Copiar ID |
-| `CANAL_ANUNCIOS` | Discord → clique direito no canal → Copiar ID |
-| `CANAL_SORTEIOS` | Discord → clique direito no canal → Copiar ID |
-| `CANAL_TICKETS` | Discord → clique direito no canal → Copiar ID |
-| `CANAL_LOGS` | Discord → clique direito no canal → Copiar ID |
-| `CATEGORIA_TICKETS` | Discord → clique direito na categoria → Copiar ID |
-| `CARGO_STAFF` | Discord → clique direito no cargo → Copiar ID |
-
-> **Como ativar IDs no Discord:** Configurações → Aparência → Modo Desenvolvedor ✅
+| `GUILD_ID` | ID do servidor Discord |
+| `IP_MINECRAFT` | IP do servidor Minecraft |
+| `URL_LOJA` | URL da loja (deixe vazio para "Em Breve!") |
+| `CARGO_STAFF` | ID do cargo de staff |
+| `CARGO_MEMBRO` | ID do cargo dado automaticamente ao entrar |
+| `CANAL_COMANDOS` | ID do canal de comandos |
+| `CANAL_BOAS_VINDAS` | ID do canal de boas-vindas |
+| `CANAL_ANUNCIOS` | ID do canal de anúncios |
+| `CANAL_SORTEIOS` | ID do canal de sorteios |
+| `CANAL_LOGS_TICKETS` | ID do canal de logs de tickets |
+| `CANAL_LOGS_TRANSCRIPTS` | ID do canal de transcripts |
+| `CANAL_LOGS_MODERACAO` | ID do canal de logs de moderação |
+| `CANAL_LOGS_MENSAGENS` | ID do canal de logs de mensagens |
+| `CATEGORIA_TICKET_COMPRAS` | ID da categoria de tickets de compras |
+| `CATEGORIA_TICKET_DUVIDAS` | ID da categoria de tickets de dúvidas |
+| `CATEGORIA_TICKET_DENUNCIAS` | ID da categoria de tickets de denúncias |
+| `CATEGORIA_TICKET_REVISOES` | ID da categoria de tickets de revisões |
+| `CATEGORIA_TICKET_PARCEIROS` | ID da categoria de tickets de parceiros |
+| `CATEGORIA_TICKET_BOOST` | ID da categoria de tickets de boost |
+| `CATEGORIA_TICKET_OUTROS` | ID da categoria de tickets outros |
 
 ### 4. Registre os slash commands
 ```bash
 npm run deploy
 ```
-> Isso registra os comandos no servidor. Execute sempre que adicionar ou modificar comandos.
 
 ### 5. Inicie o bot
 ```bash
 # Produção
 npm start
 
-# Desenvolvimento (reinicia automaticamente ao salvar)
+# Desenvolvimento
 npm run dev
 ```
 
@@ -56,118 +65,92 @@ npm run dev
 
 ## 📋 Comandos
 
-### 📢 Anúncios
+### 📢 Comunicação
 | Comando | Descrição | Permissão |
 |---|---|---|
-| `/anunciar` | Envia um anúncio em embed para um canal | Manage Messages |
+| `/say` | Envia uma mensagem simples pelo bot | Manage Messages |
+| `/anunciar` | Envia um anúncio em embed | Manage Messages |
 
 ### 🎉 Sorteios
 | Comando | Descrição | Permissão |
 |---|---|---|
-| `/sorteio criar` | Cria um sorteio com timer automático | Manage Events |
+| `/sorteio criar` | Cria um sorteio com data e hora | Manage Events |
 | `/sorteio encerrar` | Encerra um sorteio antes do tempo | Manage Events |
-| `/sorteio resorteio` | Sorteia novamente entre participantes | Manage Events |
+| `/sorteio resorteio` | Sorteia novamente excluindo ganhadores | Manage Events |
 
 ### 🎫 Tickets
 | Comando | Descrição | Permissão |
 |---|---|---|
-| `/ticket painel` | Envia o painel de abertura de tickets | Manage Guild |
-| `/ticket fechar` | Fecha o ticket atual | Qualquer um |
+| `/ticket painel` | Envia o painel de tickets | Manage Channels |
+| `/ticket fechar` | Fecha o ticket com transcript | Manage Channels |
 | `/ticket add` | Adiciona usuário ao ticket | Manage Channels |
 | `/ticket remove` | Remove usuário do ticket | Manage Channels |
 
 ### 🛒 Loja
 | Comando | Descrição | Permissão |
 |---|---|---|
-| `/loja` | Mostra produtos e link da loja | Qualquer um |
-| `/cupom listar` | Lista cupons de desconto ativos | Qualquer um |
-| `/cupom criar` | Cria um cupom | Manage Guild |
-| `/cupom remover` | Remove um cupom | Manage Guild |
+| `/loja` | Mostra produtos disponíveis | Qualquer um |
+| `/cupom` | Lista cupons ativos | Qualquer um |
+| `/cupom-admin criar` | Cria um cupom | Manage Guild |
+| `/cupom-admin remover` | Remove um cupom | Manage Guild |
 
 ### 🔨 Moderação
 | Comando | Descrição | Permissão |
 |---|---|---|
 | `/ban` | Bane um usuário | Ban Members |
 | `/kick` | Expulsa um usuário | Kick Members |
-| `/unban` | Remove o ban de um usuário | Ban Members |
-| `/clear` | Apaga mensagens do canal | Manage Messages |
-| `/lock` | Trava o canal (ninguém pode escrever) | Manage Channels |
+| `/unban` | Remove o ban | Ban Members |
+| `/clear` | Apaga mensagens | Manage Messages |
+| `/lock` | Trava o canal | Manage Channels |
 | `/unlock` | Destrava o canal | Manage Channels |
-| `/slowmode` | Define o modo lento do canal | Manage Channels |
+| `/slowmode` | Define modo lento | Manage Channels |
+
+### 🔧 Utilitários
+| Comando | Descrição | Permissão |
+|---|---|---|
+| `/ip` | IP do servidor Minecraft | Qualquer um |
+| `/mcstatus` | Status do servidor em tempo real | Qualquer um |
+| `/ping` | Ping do bot | Qualquer um |
+| `/botinfo` | Informações do bot | Qualquer um |
+| `/serverinfo` | Informações do servidor | Qualquer um |
+| `/userinfo` | Informações de um usuário | Qualquer um |
+| `/help` | Lista todos os comandos | Qualquer um |
+| `/testar-entrada` | Simula boas-vindas | Manage Guild |
 
 ---
 
 ## 📁 Estrutura do Projeto
 
 ```
-rede-surreal-bot/
+surreal-bot/
 ├── src/
-│   ├── index.js               # Entry point
-│   ├── deploy-commands.js     # Registra slash commands
+│   ├── index.js
+│   ├── deploy-commands.js
 │   ├── commands/
-│   │   ├── anuncios/
-│   │   │   └── anunciar.js
-│   │   ├── sorteio/
-│   │   │   └── sorteio.js
-│   │   ├── ticket/
-│   │   │   └── ticket.js
-│   │   ├── loja/
-│   │   │   ├── loja.js
-│   │   │   └── cupom.js
-│   │   └── moderacao/
-│   │       ├── ban.js
-│   │       ├── kick.js
-│   │       ├── unban.js
-│   │       ├── clear.js
-│   │       ├── lock.js
-│   │       ├── unlock.js
-│   │       └── slowmode.js
+│   │   ├── anuncios/        (say, anunciar)
+│   │   ├── sorteio/         (sorteio)
+│   │   ├── ticket/          (ticket)
+│   │   ├── loja/            (loja, cupom, cupom-admin)
+│   │   ├── moderacao/       (ban, kick, unban, clear, lock, unlock, slowmode)
+│   │   └── utilitarios/     (ip, mcstatus, ping, botinfo, serverinfo, userinfo, help, testar-entrada)
 │   ├── events/
 │   │   ├── ready.js
-│   │   └── interactionCreate.js
+│   │   ├── interactionCreate.js
+│   │   ├── guildMemberAdd.js
+│   │   ├── guildMemberRemove.js
+│   │   ├── messageDelete.js
+│   │   ├── messageDeleteBulk.js
+│   │   └── messageUpdate.js
 │   └── utils/
-│       └── embed.js           # Helper para embeds padronizados
-├── data/
-│   └── cupons.json            # Banco de dados de cupons (auto-criado)
+│       ├── embed.js
+│       ├── logs.js
+│       ├── clearFlag.js
+│       └── canalComandos.js
+├── data/                    (gerado automaticamente)
+│   ├── cupons.json
+│   └── sorteios.json
 ├── .env.example
+├── .gitignore
 ├── package.json
 └── README.md
 ```
-
----
-
-## ➕ Como adicionar novos comandos
-
-1. Crie um arquivo em `src/commands/<categoria>/nome-comando.js`
-2. Exporte `data` (SlashCommandBuilder) e `execute` (função async)
-3. Rode `npm run deploy` para registrar o comando
-4. O bot carrega automaticamente sem precisar reiniciar
-
-**Exemplo mínimo:**
-```js
-const { SlashCommandBuilder } = require('discord.js');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Verifica o ping do bot'),
-
-  async execute(interaction) {
-    await interaction.reply(`🏓 Pong! ${interaction.client.ws.ping}ms`);
-  },
-};
-```
-
----
-
-## 🔧 Permissões necessárias do bot
-
-No Developer Portal → OAuth2 → URL Generator, selecione:
-- **Scopes:** `bot`, `applications.commands`
-- **Bot Permissions:** `Send Messages`, `Manage Messages`, `Manage Channels`, `Ban Members`, `Kick Members`, `Read Message History`, `View Channels`, `Embed Links`
-
----
-
-## 📝 Observações
-- Sorteios ficam em memória: se o bot reiniciar, os timers se perdem. Para produção, considere salvar em arquivo JSON ou banco de dados.
-- Cupons são salvos em `data/cupons.json` e persistem entre reinicializações.

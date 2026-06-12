@@ -23,9 +23,9 @@ module.exports = {
           {
             name: '🎉 Sorteios',
             value: [
-              '`/sorteio criar` — Cria um sorteio com timer automático',
+              '`/sorteio criar` — Cria um sorteio com data e hora definidos',
               '`/sorteio encerrar` — Encerra um sorteio antes do tempo',
-              '`/sorteio resorteio` — Sorteia novamente entre os participantes',
+              '`/sorteio resorteio` — Sorteia novamente excluindo ganhadores anteriores',
             ].join('\n'),
           },
           {
@@ -41,9 +41,9 @@ module.exports = {
             name: '🛒 Loja',
             value: [
               '`/loja` — Mostra os produtos disponíveis',
-              '`/cupom listar` — Lista cupons ativos',
-              '`/cupom criar` — Cria um cupom (staff)',
-              '`/cupom remover` — Remove um cupom (staff)',
+              '`/cupom` — Lista cupons de desconto ativos',
+              '`/cupom-admin criar` — Cria um cupom (staff)',
+              '`/cupom-admin remover` — Remove um cupom (staff)',
             ].join('\n'),
           },
           {
@@ -67,6 +67,7 @@ module.exports = {
               '`/botinfo` — Informações sobre o bot',
               '`/serverinfo` — Informações sobre o servidor Discord',
               '`/userinfo` — Informações sobre um usuário',
+              '`/testar-entrada` — Simula a mensagem de boas-vindas (staff)',
             ].join('\n'),
           },
         ],
