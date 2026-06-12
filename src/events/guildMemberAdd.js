@@ -3,6 +3,17 @@ const { Events, EmbedBuilder } = require('discord.js');
 module.exports = {
   name: Events.GuildMemberAdd,
   async execute(member) {
+    // Adiciona cargo de membro automaticamente
+    const cargoMembroId = process.env.CARGO_MEMBRO;
+    if (cargoMembroId) {
+      const cargoMembro = member.guild.roles.cache.get(cargoMembroId);
+      if (cargoMembro) {
+        await member.roles.add(cargoMembro).catch(err =>
+          console.error('[guildMemberAdd] Erro ao adicionar cargo:', err.message)
+        );
+      }
+    }
+
     const canalId = process.env.CANAL_BOAS_VINDAS;
     if (!canalId) return;
 
@@ -10,39 +21,26 @@ module.exports = {
     if (!canal) return;
 
     const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
-    const urlLoja = process.env.URL_LOJA ?? 'Em Breve!';
+    const urlLoja = process.env.URL_LOJA ?? 'https://loja.redesurreal.com.br';
     const memberCount = member.guild.memberCount;
+    const lojaTexto = `**[loja.redesurreal.com](${urlLoja})**`;
 
     const embed = new EmbedBuilder()
       .setColor(0xED4245)
-      .setTitle('⚔️ Bem-vindo(a) ao Rede Surreal!')
-      .setDescription(`Olá ${member}! É muito bom ter você aqui.\nVocê é o **${memberCount}º membro** do servidor!`)
+      .setTitle('Bem Vindo(a)!')
+      .setDescription([
+        `Olá ${member}, bem vindo ao servidor oficial da **Rede Surreal**!`,
+        '',
+        '> Fique por dentro das regras para não ser punido.',
+        '> Acesse nosso servidor pelo ip abaixo!',
+        `> Adquira seu VIP e tenha vantagens exclusivas através do site ${lojaTexto}!`,
+      ].join('\n'))
       .addFields(
-        {
-          name: '📋 Para começar',
-          value: [
-            '> Leia as regras para não ser punido',
-            '> Conecte-se ao servidor Minecraft',
-            '> Adquira seu VIP e tenha vantagens exclusivas',
-          ].join('\n'),
-          inline: false,
-        },
-        {
-          name: '🌐 IP do Servidor',
-          value: `\`\`\`${ip}\`\`\``,
-          inline: true,
-        },
-        {
-          name: '🛒 Loja',
-          value: urlLoja === 'Em Breve!' ? '`Em Breve!`' : `[Clique aqui](${urlLoja})`,
-          inline: true,
-        },
+        { name: '🌐 IP do Servidor', value: `\`\`\`${ip}\`\`\``, inline: true },
       )
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
-      .setImage('https://i.imgur.com/sua-banner-aqui.png') // opcional — pode remover
-      .setTimestamp()
-      .setFooter({ text: `Rede Surreal • ${memberCount} membros` });
+      .setFooter({ text: `Rede Surreal | Minecraft Server • ${memberCount} membros` });
 
-    await canal.send({ content: `${member}`, embeds: [embed] });
+    await canal.send({ embeds: [embed] });
   },
 };
