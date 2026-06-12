@@ -9,8 +9,8 @@ module.exports = {
     const canal = member.guild.channels.cache.get(canalId);
     if (!canal) return;
 
-    const ip = process.env.IP_MINECRAFT ?? 'em breve';
-    const urlLoja = process.env.URL_LOJA ?? '[URL da loja aqui]';
+    const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
+    const urlLoja = process.env.URL_LOJA ?? 'Em Breve!';
     const memberCount = member.guild.memberCount;
 
     const embed = new EmbedBuilder()
@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           name: '🛒 Loja',
-          value: `[Clique aqui](${urlLoja})`,
+          value: urlLoja === 'Em Breve!' ? '`Em Breve!`' : `[Clique aqui](${urlLoja})`,
           inline: true,
         },
       )

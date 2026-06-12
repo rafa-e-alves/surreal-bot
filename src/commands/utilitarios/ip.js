@@ -7,7 +7,7 @@ module.exports = {
     .setDescription('🌐 Mostra o IP do servidor Minecraft'),
 
   async execute(interaction) {
-    const ip = process.env.IP_MINECRAFT ?? 'Não configurado';
+    const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
     await interaction.reply({
       embeds: [criarEmbed({
         tipo: 'primaria',

@@ -34,7 +34,7 @@ const loja = {
     .setDescription('🛒 Veja os produtos disponíveis na loja do servidor'),
 
   async execute(interaction) {
-    const url = process.env.URL_LOJA ?? '[URL da loja aqui]';
+    const url = process.env.URL_LOJA ?? 'Em Breve!';
 
     const embed = criarEmbed({
       tipo: 'primaria',
@@ -47,7 +47,7 @@ const loja = {
         '**🥇 VIP Ouro** — Todos os benefícios + tag especial',
         '**💎 VIP Diamante** — Máximo: todos os perks + suporte prioritário',
         '',
-        `🔗 **[Acessar a loja](${url})**`,
+        `🔗 **Loja:** ${url === 'Em Breve!' ? '`Em Breve!`' : `[Acessar a loja](${url})`}`,
         '',
         '💡 Use **/cupom** para ver descontos disponíveis!',
       ].join('\n'),
