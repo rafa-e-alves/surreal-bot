@@ -10,7 +10,7 @@ module.exports = {
     await interaction.reply({
       embeds: [criarEmbed({
         tipo: 'info',
-        titulo: '📖 Comandos — Surreal Bot',
+        titulo: '📖 Comandos — Rede Surreal Bot',
         descricao: 'Todos os comandos disponíveis:',
         fields: [
           {

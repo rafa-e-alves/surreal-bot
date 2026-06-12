@@ -123,7 +123,7 @@ module.exports = {
           .setColor(CORES[cor])
           .setDescription(conteudo)
           .setTimestamp()
-          .setFooter({ text: '⚔️ Surreal Factions' });
+          .setFooter({ text: '⚔️ Rede Surreal' });
 
         if (titulo) embed.setTitle(titulo);
 

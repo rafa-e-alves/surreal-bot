@@ -90,9 +90,9 @@ async function enviarPainel(interaction) {
 
   const embed = criarEmbed({
     tipo: 'primaria',
-    titulo: '🎫 Central de Atendimento — Surreal Factions',
+    titulo: '🎫 Central de Atendimento — Rede Surreal',
     descricao: [
-      'Olá, seja bem-vindo(a) à central de atendimento do **Surreal Bot**.',
+      'Olá, seja bem-vindo(a) à central de atendimento do **Rede Surreal Bot**.',
       'Abaixo estão os tipos de atendimento disponíveis.',
       '',
       '**Atendimento via chamado** 📩',

@@ -34,7 +34,7 @@ const loja = {
     .setDescription('🛒 Veja os produtos disponíveis na loja do servidor'),
 
   async execute(interaction) {
-    const url = process.env.URL_LOJA ?? 'https://redesurreal.com/loja';
+    const url = process.env.URL_LOJA ?? '[URL da loja aqui]';
 
     const embed = criarEmbed({
       tipo: 'primaria',

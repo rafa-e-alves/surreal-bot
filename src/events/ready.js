@@ -10,7 +10,7 @@ module.exports = {
 
     // Status rotativo a cada 30s
     const atividades = [
-      { name: '⚔️ Rede Surreal Factions', type: ActivityType.Playing },
+      { name: '⚔️ Rede Rede Surreal', type: ActivityType.Playing },
       { name: `🏰 ${client.guilds.cache.first()?.memberCount ?? '?'} jogadores`, type: ActivityType.Watching },
       { name: '💎 /loja para VIP', type: ActivityType.Watching },
     ];

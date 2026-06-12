@@ -32,7 +32,7 @@ function criarEmbed({ tipo = 'primaria', titulo, descricao, fields = [], thumbna
   if (imagem) embed.setImage(imagem);
   if (timestamp) embed.setTimestamp();
 
-  embed.setFooter({ text: '⚔️ Surreal Factions' });
+  embed.setFooter({ text: '⚔️ Rede Surreal' });
 
   return embed;
 }

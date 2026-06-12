@@ -32,7 +32,7 @@ function embedLog({ cor, titulo, fields = [], descricao = null, timestamp = true
   if (descricao) embed.setDescription(descricao);
   if (fields.length > 0) embed.addFields(fields);
   if (timestamp) embed.setTimestamp();
-  embed.setFooter({ text: '⚔️ Surreal Factions' });
+  embed.setFooter({ text: '⚔️ Rede Surreal' });
 
   return embed;
 }

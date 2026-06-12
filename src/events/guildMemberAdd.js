@@ -10,12 +10,12 @@ module.exports = {
     if (!canal) return;
 
     const ip = process.env.IP_MINECRAFT ?? 'em breve';
-    const urlLoja = process.env.URL_LOJA ?? 'https://loja.surrealfactions.com.br';
+    const urlLoja = process.env.URL_LOJA ?? '[URL da loja aqui]';
     const memberCount = member.guild.memberCount;
 
     const embed = new EmbedBuilder()
       .setColor(0xED4245)
-      .setTitle('⚔️ Bem-vindo(a) ao Surreal Factions!')
+      .setTitle('⚔️ Bem-vindo(a) ao Rede Surreal!')
       .setDescription(`Olá ${member}! É muito bom ter você aqui.\nVocê é o **${memberCount}º membro** do servidor!`)
       .addFields(
         {
@@ -39,8 +39,9 @@ module.exports = {
         },
       )
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
+      .setImage('https://i.imgur.com/sua-banner-aqui.png') // opcional — pode remover
       .setTimestamp()
-      .setFooter({ text: `Surreal Factions • ${memberCount} membros` });
+      .setFooter({ text: `Rede Surreal • ${memberCount} membros` });
 
     await canal.send({ content: `${member}`, embeds: [embed] });
   },
