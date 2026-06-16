@@ -1,63 +1,82 @@
-# ⚔️ Rede Surreal Bot — discord.js v14
+<div align="center">
 
-Bot oficial do servidor de Minecraft Factions **Rede Surreal**, feito com discord.js v14 e slash commands nativos.
+<img src="https://raw.githubusercontent.com/rafa-e-alves/surreal-bot/main/assets/logo.png" alt="Rede Surreal Bot" width="120" />
+
+# Rede Surreal Bot
+
+**Bot oficial do servidor Rede Surreal — Minecraft Factions**
+
+[![discord.js](https://img.shields.io/badge/discord.js-v14-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org)
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![License](https://img.shields.io/badge/license-MIT-ED4245?style=for-the-badge)](LICENSE)
+
+</div>
 
 ---
 
-## 🚀 Instalação DO BAGUI
+## 📖 Sobre
 
-### 1. Pré-requisitos
+Bot desenvolvido com **discord.js v14** para o servidor de Minecraft Factions **Rede Surreal**. Conta com sistema completo de tickets, sorteios persistentes, logs automáticos, sistema de cupons, moderação e muito mais — tudo via slash commands nativos do Discord.
+
+---
+
+## ✨ Funcionalidades
+
+- 🎫 **Sistema de Tickets** — painel com categorias, transcript automático e logs separados
+- 🎉 **Sorteios** — com data/hora definida, persistência após reinicialização e resorteio
+- 📋 **Logs Automáticos** — mensagens editadas/apagadas, moderação, tickets e transcripts em canais separados
+- 🏷️ **Cupons de Desconto** — criação, remoção e listagem com data de expiração
+- 🔨 **Moderação** — ban, kick, unban, clear, lock, unlock e slowmode
+- 📢 **Comunicação** — anúncios em embed e mensagens simples pelo bot
+- ⛏️ **Integração Minecraft** — status do servidor em tempo real via mcstatus.io
+- 👋 **Boas-vindas** — mensagem automática com foto do usuário e cargo automático
+- 🔒 **Segurança** — comandos restritos por canal e permissões nativas do Discord
+
+---
+
+## 🚀 Instalação
+
+### Pré-requisitos
+
 - [Node.js 18+](https://nodejs.org/)
 - Conta no [Discord Developer Portal](https://discord.com/developers/applications)
 
-### 2. Clone e instale as dependências
+### 1. Clone o repositório
+
 ```bash
 git clone https://github.com/rafa-e-alves/surreal-bot.git
 cd surreal-bot
+```
+
+### 2. Instale as dependências
+
+```bash
 npm install
 ```
 
-### 3. Configure o `.env`
+### 3. Configure as variáveis de ambiente
+
 ```bash
 cp .env.example .env
 ```
 
-| Variável | Descrição |
-|---|---|
-| `BOT_TOKEN` | Developer Portal → Bot → Token |
-| `CLIENT_ID` | Developer Portal → Application ID |
-| `GUILD_ID` | ID do servidor Discord |
-| `IP_MINECRAFT` | IP do servidor Minecraft |
-| `URL_LOJA` | URL da loja (deixe vazio para "Em Breve!") |
-| `CARGO_STAFF` | ID do cargo de staff |
-| `CARGO_MEMBRO` | ID do cargo dado automaticamente ao entrar |
-| `CANAL_COMANDOS` | ID do canal de comandos |
-| `CANAL_BOAS_VINDAS` | ID do canal de boas-vindas |
-| `CANAL_ANUNCIOS` | ID do canal de anúncios |
-| `CANAL_SORTEIOS` | ID do canal de sorteios |
-| `CANAL_LOGS_TICKETS` | ID do canal de logs de tickets |
-| `CANAL_LOGS_TRANSCRIPTS` | ID do canal de transcripts |
-| `CANAL_LOGS_MODERACAO` | ID do canal de logs de moderação |
-| `CANAL_LOGS_MENSAGENS` | ID do canal de logs de mensagens |
-| `CATEGORIA_TICKET_COMPRAS` | ID da categoria de tickets de compras |
-| `CATEGORIA_TICKET_DUVIDAS` | ID da categoria de tickets de dúvidas |
-| `CATEGORIA_TICKET_DENUNCIAS` | ID da categoria de tickets de denúncias |
-| `CATEGORIA_TICKET_REVISOES` | ID da categoria de tickets de revisões |
-| `CATEGORIA_TICKET_PARCEIROS` | ID da categoria de tickets de parceiros |
-| `CATEGORIA_TICKET_BOOST` | ID da categoria de tickets de boost |
-| `CATEGORIA_TICKET_OUTROS` | ID da categoria de tickets outros |
+Edite o `.env` com seus dados. Veja o [`.env.example`](.env.example) para referência completa.
 
 ### 4. Registre os slash commands
+
 ```bash
 npm run deploy
 ```
 
+> ⚠️ Execute este comando apenas uma vez, ou quando adicionar/modificar comandos.
+
 ### 5. Inicie o bot
+
 ```bash
 # Produção
 npm start
 
-# Desenvolvimento
+# Desenvolvimento (reinicia automaticamente ao salvar)
 npm run dev
 ```
 
@@ -66,87 +85,87 @@ npm run dev
 ## 📋 Comandos
 
 ### 📢 Comunicação
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/say` | Envia uma mensagem simples pelo bot | Manage Messages |
-| `/anunciar` | Envia um anúncio em embed | Manage Messages |
+| Comando | Descrição |
+|---|---|
+| `/say` | Envia uma mensagem simples pelo bot |
+| `/anunciar` | Envia um anúncio em embed com título, imagem e menção de cargo |
 
 ### 🎉 Sorteios
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/sorteio criar` | Cria um sorteio com data e hora | Manage Events |
-| `/sorteio encerrar` | Encerra um sorteio antes do tempo | Manage Events |
-| `/sorteio resorteio` | Sorteia novamente excluindo ganhadores | Manage Events |
+| Comando | Descrição |
+|---|---|
+| `/sorteio criar` | Cria um sorteio com data e hora exatas |
+| `/sorteio encerrar` | Encerra um sorteio antes do tempo |
+| `/sorteio resorteio` | Sorteia novamente excluindo ganhadores anteriores |
 
 ### 🎫 Tickets
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/ticket painel` | Envia o painel de tickets | Manage Channels |
-| `/ticket fechar` | Fecha o ticket com transcript | Manage Channels |
-| `/ticket add` | Adiciona usuário ao ticket | Manage Channels |
-| `/ticket remove` | Remove usuário do ticket | Manage Channels |
+| Comando | Descrição |
+|---|---|
+| `/ticket painel` | Envia o painel de abertura de tickets |
+| `/ticket fechar` | Fecha o ticket gerando transcript automático |
+| `/ticket add` | Adiciona um usuário ao ticket |
+| `/ticket remove` | Remove um usuário do ticket |
 
 ### 🛒 Loja
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/loja` | Mostra produtos disponíveis | Qualquer um |
-| `/cupom` | Lista cupons ativos | Qualquer um |
-| `/cupom-admin criar` | Cria um cupom | Manage Guild |
-| `/cupom-admin remover` | Remove um cupom | Manage Guild |
+| Comando | Descrição |
+|---|---|
+| `/loja` | Exibe os produtos disponíveis |
+| `/cupom` | Lista os cupons de desconto ativos |
+| `/cupom-admin criar` | Cria um cupom com desconto e validade |
+| `/cupom-admin remover` | Remove um cupom |
 
 ### 🔨 Moderação
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/ban` | Bane um usuário | Ban Members |
-| `/kick` | Expulsa um usuário | Kick Members |
-| `/unban` | Remove o ban | Ban Members |
-| `/clear` | Apaga mensagens | Manage Messages |
-| `/lock` | Trava o canal | Manage Channels |
-| `/unlock` | Destrava o canal | Manage Channels |
-| `/slowmode` | Define modo lento | Manage Channels |
+| Comando | Descrição |
+|---|---|
+| `/ban` | Bane um usuário do servidor |
+| `/kick` | Expulsa um usuário do servidor |
+| `/unban` | Remove o ban de um usuário |
+| `/clear` | Apaga mensagens do canal |
+| `/lock` | Trava o canal (ninguém pode enviar mensagens) |
+| `/unlock` | Destrava o canal |
+| `/slowmode` | Define o modo lento do canal |
 
 ### 🔧 Utilitários
-| Comando | Descrição | Permissão |
-|---|---|---|
-| `/ip` | IP do servidor Minecraft | Qualquer um |
-| `/mcstatus` | Status do servidor em tempo real | Qualquer um |
-| `/ping` | Ping do bot | Qualquer um |
-| `/botinfo` | Informações do bot | Qualquer um |
-| `/serverinfo` | Informações do servidor | Qualquer um |
-| `/userinfo` | Informações de um usuário | Qualquer um |
-| `/help` | Lista todos os comandos | Qualquer um |
-| `/testar-entrada` | Simula boas-vindas | Manage Guild |
+| Comando | Descrição |
+|---|---|
+| `/ip` | Exibe o IP do servidor Minecraft |
+| `/mcstatus` | Status do servidor Minecraft em tempo real |
+| `/ping` | Latência do bot |
+| `/botinfo` | Informações sobre o bot |
+| `/serverinfo` | Informações sobre o servidor Discord |
+| `/userinfo` | Informações sobre um usuário |
+| `/help` | Lista todos os comandos disponíveis |
+| `/testar-entrada` | Simula a mensagem de boas-vindas |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura
 
 ```
 surreal-bot/
 ├── src/
-│   ├── index.js
-│   ├── deploy-commands.js
+│   ├── index.js                  # Entry point
+│   ├── deploy-commands.js        # Registro de slash commands
 │   ├── commands/
-│   │   ├── anuncios/        (say, anunciar)
-│   │   ├── sorteio/         (sorteio)
-│   │   ├── ticket/          (ticket)
-│   │   ├── loja/            (loja, cupom, cupom-admin)
-│   │   ├── moderacao/       (ban, kick, unban, clear, lock, unlock, slowmode)
-│   │   └── utilitarios/     (ip, mcstatus, ping, botinfo, serverinfo, userinfo, help, testar-entrada)
+│   │   ├── anuncios/             # say, anunciar
+│   │   ├── sorteio/              # sorteio
+│   │   ├── ticket/               # ticket
+│   │   ├── loja/                 # loja, cupom, cupom-admin
+│   │   ├── moderacao/            # ban, kick, unban, clear, lock, unlock, slowmode
+│   │   └── utilitarios/          # ip, mcstatus, ping, botinfo, serverinfo, userinfo, help, testar-entrada
 │   ├── events/
 │   │   ├── ready.js
 │   │   ├── interactionCreate.js
-│   │   ├── guildMemberAdd.js
-│   │   ├── guildMemberRemove.js
-│   │   ├── messageDelete.js
-│   │   ├── messageDeleteBulk.js
-│   │   └── messageUpdate.js
+│   │   ├── guildMemberAdd.js     # Boas-vindas + cargo automático
+│   │   ├── guildMemberRemove.js  # Fecha ticket ao sair do servidor
+│   │   ├── messageDelete.js      # Log de mensagens apagadas
+│   │   ├── messageDeleteBulk.js  # Log de clear
+│   │   └── messageUpdate.js      # Log de mensagens editadas
 │   └── utils/
-│       ├── embed.js
-│       ├── logs.js
-│       ├── clearFlag.js
-│       └── canalComandos.js
-├── data/                    (gerado automaticamente)
+│       ├── embed.js              # Helper de embeds padronizados
+│       ├── logs.js               # Helper de logs
+│       ├── clearFlag.js          # Controle de bulk delete
+│       └── canalComandos.js      # Restrição de canal por comando
+├── data/                         # Gerado automaticamente
 │   ├── cupons.json
 │   └── sorteios.json
 ├── .env.example
@@ -154,3 +173,24 @@ surreal-bot/
 ├── package.json
 └── README.md
 ```
+
+---
+
+## 🔧 Deploy com Auto-Update
+
+O projeto está configurado para deploy automático via **webhook do GitHub + PM2** em uma VM Oracle Cloud Always Free.
+
+Ao dar `git push`, o servidor recebe o sinal instantaneamente, faz `git pull` e reinicia o bot automaticamente.
+
+```bash
+# Gerenciar o bot na VM
+pm2 status                        # Ver status
+pm2 logs rede-surreal-bot         # Ver logs em tempo real
+pm2 restart rede-surreal-bot      # Reiniciar manualmente
+```
+
+---
+
+## 📄 Licença
+
+MIT © [Rafael Alves](https://github.com/rafa-e-alves)
