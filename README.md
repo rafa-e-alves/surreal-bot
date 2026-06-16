@@ -4,7 +4,7 @@ Bot oficial do servidor de Minecraft Factions **Rede Surreal**, feito com discor
 
 ---
 
-## 🚀 Instalação
+## 🚀 Instalação DO BAGUI
 
 ### 1. Pré-requisitos
 - [Node.js 18+](https://nodejs.org/)
