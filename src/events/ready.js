@@ -13,10 +13,12 @@ module.exports = {
     restaurarSorteios(client);
 
     // Status rotativo a cada 30s
+    const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
+    const loja = process.env.URL_LOJA ? process.env.URL_LOJA.replace('https://', '').replace('http://', '') : 'loja.redesurreal.com.br';
     const atividades = [
-      { name: '⚔️ Rede Rede Surreal', type: ActivityType.Playing },
-      { name: `🏰 ${client.guilds.cache.first()?.memberCount ?? '?'} jogadores`, type: ActivityType.Watching },
-      { name: '💎 /loja para VIP', type: ActivityType.Watching },
+      { name: `⚔️ Rede Surreal`, type: ActivityType.Playing },
+      { name: `🌐 ${ip}`, type: ActivityType.Watching },
+      { name: `💎 ${loja}`, type: ActivityType.Watching },
     ];
 
     let i = 0;
