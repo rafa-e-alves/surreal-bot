@@ -4,7 +4,7 @@
 
 # Rede Surreal Bot
 
-**Bot oficial do servidor Rede Surreal — Minecraft Factions**
+**Bot do servidor Rede Surreal — Minecraft Factions**
 
 [![discord.js](https://img.shields.io/badge/discord.js-v14-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org)
 [![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
@@ -14,90 +14,70 @@
 
 ---
 
-## 📖 Sobre
+## Sobre
 
-Bot desenvolvido com **discord.js v14** para o servidor de Minecraft Factions **Rede Surreal**. Conta com sistema completo de tickets, sorteios persistentes, logs automáticos, sistema de cupons, moderação e muito mais — tudo via slash commands nativos do Discord.
-
----
-
-## ✨ Funcionalidades
-
-- 🎫 **Sistema de Tickets** — painel com categorias, transcript automático e logs separados
-- 🎉 **Sorteios** — com data/hora definida, persistência após reinicialização e resorteio
-- 📋 **Logs Automáticos** — mensagens editadas/apagadas, moderação, tickets e transcripts em canais separados
-- 🏷️ **Cupons de Desconto** — criação, remoção e listagem com data de expiração
-- 🔨 **Moderação** — ban, kick, unban, clear, lock, unlock e slowmode
-- 📢 **Comunicação** — anúncios em embed e mensagens simples pelo bot
-- ⛏️ **Integração Minecraft** — status do servidor em tempo real via mcstatus.io
-- 👋 **Boas-vindas** — mensagem automática com foto do usuário e cargo automático
-- 🔒 **Segurança** — comandos restritos por canal e permissões nativas do Discord
+Bot desenvolvido em **discord.js v14** para o servidor de Minecraft Factions **Rede Surreal**. Construído do zero com slash commands nativos, cobre desde moderação e tickets até sorteios com persistência e logs automáticos por categoria.
 
 ---
 
-## 🚀 Instalação
+## Funcionalidades
+
+- **Sistema de Tickets** — painel com sete categorias, geração automática de transcript e logs separados por tipo
+- **Sorteios** — data e hora definidas pelo staff, persistência após reinicialização do bot e suporte a resorteio excluindo ganhadores anteriores
+- **Logs Automáticos** — mensagens editadas e apagadas, ações de moderação, abertura/fechamento de tickets e transcripts, cada um em seu próprio canal
+- **Cupons de Desconto** — criação com validade opcional, remoção e listagem pública
+- **Moderação** — ban, kick, unban, clear com backup das mensagens, lock, unlock e slowmode
+- **Comunicação** — anúncios em embed e mensagens simples enviadas pelo bot
+- **Integração com Minecraft** — status do servidor em tempo real via API mcstatus.io
+- **Boas-vindas** — mensagem automática com foto de perfil do usuário e atribuição automática de cargo
+- **Restrição de Canal** — comandos de usuário bloqueados fora do canal de comandos configurado
+
+---
+
+## Instalação
 
 ### Pré-requisitos
 
 - [Node.js 18+](https://nodejs.org/)
-- Conta no [Discord Developer Portal](https://discord.com/developers/applications)
+- Bot criado no [Discord Developer Portal](https://discord.com/developers/applications)
 
-### 1. Clone o repositório
+### Passos
 
 ```bash
 git clone https://github.com/rafa-e-alves/surreal-bot.git
 cd surreal-bot
-```
-
-### 2. Instale as dependências
-
-```bash
 npm install
-```
-
-### 3. Configure as variáveis de ambiente
-
-```bash
 cp .env.example .env
 ```
 
-Edite o `.env` com seus dados. Veja o [`.env.example`](.env.example) para referência completa.
-
-### 4. Registre os slash commands
+Preencha o `.env` com os dados do seu servidor. Todas as variáveis estão documentadas no [`.env.example`](.env.example).
 
 ```bash
+# Registra os slash commands (executar uma vez, ou após mudanças nos comandos)
 npm run deploy
-```
 
-> ⚠️ Execute este comando apenas uma vez, ou quando adicionar/modificar comandos.
-
-### 5. Inicie o bot
-
-```bash
-# Produção
+# Inicia o bot
 npm start
-
-# Desenvolvimento (reinicia automaticamente ao salvar)
-npm run dev
 ```
 
 ---
 
-## 📋 Comandos
+## Comandos
 
-### 📢 Comunicação
+### Comunicação
 | Comando | Descrição |
 |---|---|
 | `/say` | Envia uma mensagem simples pelo bot |
 | `/anunciar` | Envia um anúncio em embed com título, imagem e menção de cargo |
 
-### 🎉 Sorteios
+### Sorteios
 | Comando | Descrição |
 |---|---|
-| `/sorteio criar` | Cria um sorteio com data e hora exatas |
+| `/sorteio criar` | Cria um sorteio definindo data e hora exatas |
 | `/sorteio encerrar` | Encerra um sorteio antes do tempo |
-| `/sorteio resorteio` | Sorteia novamente excluindo ganhadores anteriores |
+| `/sorteio resorteio` | Realiza um novo sorteio excluindo ganhadores anteriores |
 
-### 🎫 Tickets
+### Tickets
 | Comando | Descrição |
 |---|---|
 | `/ticket painel` | Envia o painel de abertura de tickets |
@@ -105,7 +85,7 @@ npm run dev
 | `/ticket add` | Adiciona um usuário ao ticket |
 | `/ticket remove` | Remove um usuário do ticket |
 
-### 🛒 Loja
+### Loja
 | Comando | Descrição |
 |---|---|
 | `/loja` | Exibe os produtos disponíveis |
@@ -113,38 +93,38 @@ npm run dev
 | `/cupom-admin criar` | Cria um cupom com desconto e validade |
 | `/cupom-admin remover` | Remove um cupom |
 
-### 🔨 Moderação
+### Moderação
 | Comando | Descrição |
 |---|---|
 | `/ban` | Bane um usuário do servidor |
 | `/kick` | Expulsa um usuário do servidor |
 | `/unban` | Remove o ban de um usuário |
-| `/clear` | Apaga mensagens do canal |
-| `/lock` | Trava o canal (ninguém pode enviar mensagens) |
+| `/clear` | Apaga mensagens do canal e registra o conteúdo em log |
+| `/lock` | Trava o canal |
 | `/unlock` | Destrava o canal |
-| `/slowmode` | Define o modo lento do canal |
+| `/slowmode` | Define o intervalo do modo lento |
 
-### 🔧 Utilitários
+### Utilitários
 | Comando | Descrição |
 |---|---|
 | `/ip` | Exibe o IP do servidor Minecraft |
-| `/mcstatus` | Status do servidor Minecraft em tempo real |
-| `/ping` | Latência do bot |
-| `/botinfo` | Informações sobre o bot |
-| `/serverinfo` | Informações sobre o servidor Discord |
-| `/userinfo` | Informações sobre um usuário |
+| `/mcstatus` | Consulta o status do servidor Minecraft em tempo real |
+| `/ping` | Exibe a latência do bot |
+| `/botinfo` | Exibe informações sobre o bot |
+| `/serverinfo` | Exibe informações sobre o servidor Discord |
+| `/userinfo` | Exibe informações sobre um usuário |
 | `/help` | Lista todos os comandos disponíveis |
 | `/testar-entrada` | Simula a mensagem de boas-vindas |
 
 ---
 
-## 📁 Estrutura
+## Estrutura do Projeto
 
 ```
 surreal-bot/
 ├── src/
-│   ├── index.js                  # Entry point
-│   ├── deploy-commands.js        # Registro de slash commands
+│   ├── index.js
+│   ├── deploy-commands.js
 │   ├── commands/
 │   │   ├── anuncios/             # say, anunciar
 │   │   ├── sorteio/              # sorteio
@@ -155,19 +135,21 @@ surreal-bot/
 │   ├── events/
 │   │   ├── ready.js
 │   │   ├── interactionCreate.js
-│   │   ├── guildMemberAdd.js     # Boas-vindas + cargo automático
-│   │   ├── guildMemberRemove.js  # Fecha ticket ao sair do servidor
-│   │   ├── messageDelete.js      # Log de mensagens apagadas
-│   │   ├── messageDeleteBulk.js  # Log de clear
-│   │   └── messageUpdate.js      # Log de mensagens editadas
+│   │   ├── guildMemberAdd.js
+│   │   ├── guildMemberRemove.js
+│   │   ├── messageDelete.js
+│   │   ├── messageDeleteBulk.js
+│   │   └── messageUpdate.js
 │   └── utils/
-│       ├── embed.js              # Helper de embeds padronizados
-│       ├── logs.js               # Helper de logs
-│       ├── clearFlag.js          # Controle de bulk delete
-│       └── canalComandos.js      # Restrição de canal por comando
-├── data/                         # Gerado automaticamente
+│       ├── embed.js
+│       ├── logs.js
+│       ├── clearFlag.js
+│       └── canalComandos.js
+├── data/                         # Gerado automaticamente em runtime
 │   ├── cupons.json
 │   └── sorteios.json
+├── assets/
+│   └── logo.png
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -176,21 +158,6 @@ surreal-bot/
 
 ---
 
-## 🔧 Deploy com Auto-Update
-
-O projeto está configurado para deploy automático via **webhook do GitHub + PM2** em uma VM Oracle Cloud Always Free.
-
-Ao dar `git push`, o servidor recebe o sinal instantaneamente, faz `git pull` e reinicia o bot automaticamente.
-
-```bash
-# Gerenciar o bot na VM
-pm2 status                        # Ver status
-pm2 logs rede-surreal-bot         # Ver logs em tempo real
-pm2 restart rede-surreal-bot      # Reiniciar manualmente
-```
-
----
-
-## 📄 Licença
+## Licença
 
 MIT © [Rafael Alves](https://github.com/rafa-e-alves)
