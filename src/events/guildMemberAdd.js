@@ -1,4 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
+const { enviarLog, embedLog } = require('../utils/logs');
 
 module.exports = {
   name: Events.GuildMemberAdd,
@@ -14,6 +15,21 @@ module.exports = {
       }
     }
 
+    // Log de entrada
+    await enviarLog(member.guild, 'CANAL_LOGS_MEMBROS', {
+      embeds: [embedLog({
+        cor: 0x57F287,
+        titulo: '📥 Membro Entrou',
+        fields: [
+          { name: '👤 Usuário', value: `${member} \`(${member.user.tag})\``, inline: true },
+          { name: '🆔 ID', value: `\`${member.id}\``, inline: true },
+          { name: '📅 Conta criada', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
+          { name: '👥 Total de membros', value: `\`${member.guild.memberCount}\``, inline: true },
+        ],
+      })],
+    });
+
+    // Mensagem de boas-vindas
     const canalId = process.env.CANAL_BOAS_VINDAS;
     if (!canalId) return;
 
@@ -21,12 +37,12 @@ module.exports = {
     if (!canal) return;
 
     const ip = process.env.IP_MINECRAFT ?? 'Em Breve!';
-    const urlLoja = process.env.URL_LOJA ?? 'https://loja.redesurreal.com.br';
+    const urlLoja = process.env.URL_LOJA ?? null;
     const memberCount = member.guild.memberCount;
     const lojaTexto = urlLoja ? `**[loja.redesurreal.com](${urlLoja})**` : '**Em Breve!**';
 
     const embed = new EmbedBuilder()
-      .setColor(0xED4245)
+      .setColor(0xFF0000)
       .setTitle('Bem Vindo(a)!')
       .setDescription([
         `Olá ${member}, bem vindo ao servidor oficial da **Rede Surreal**!`,

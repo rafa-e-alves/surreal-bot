@@ -4,7 +4,21 @@ const { enviarLog, embedLog } = require('../utils/logs');
 module.exports = {
   name: Events.GuildMemberRemove,
   async execute(member) {
-    // Procura ticket aberto desse usuário
+    // Log de saída
+    await enviarLog(member.guild, 'CANAL_LOGS_MEMBROS', {
+      embeds: [embedLog({
+        cor: 0xED4245,
+        titulo: '📤 Membro Saiu',
+        fields: [
+          { name: '👤 Usuário', value: `${member.user} \`(${member.user.tag})\``, inline: true },
+          { name: '🆔 ID', value: `\`${member.id}\``, inline: true },
+          { name: '📅 Entrou em', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
+          { name: '👥 Total de membros', value: `\`${member.guild.memberCount}\``, inline: true },
+        ],
+      })],
+    });
+
+    // Fecha ticket aberto se houver
     const ticket = member.guild.channels.cache.find(
       ch => ch.name === `ticket-${member.id}` ||
             ch.topic?.includes(`(${member.id})`),
@@ -13,7 +27,6 @@ module.exports = {
     if (!ticket) return;
 
     try {
-      // Gera transcript
       const mensagens = await ticket.messages.fetch({ limit: 100 });
       const sorted = [...mensagens.values()].reverse();
 
@@ -38,7 +51,6 @@ module.exports = {
         { name: `${ticket.name}.txt` }
       );
 
-      // Log de ticket fechado
       await enviarLog(member.guild, 'CANAL_LOGS_TICKETS', {
         embeds: [embedLog({
           cor: 0xED4245,
@@ -51,7 +63,6 @@ module.exports = {
         })],
       });
 
-      // Transcript
       await enviarLog(member.guild, 'CANAL_LOGS_TRANSCRIPTS', {
         embeds: [embedLog({
           cor: 0x5865F2,

@@ -25,7 +25,7 @@ module.exports = {
             value: [
               '`/sorteio criar` — Cria um sorteio com data e hora definidos',
               '`/sorteio encerrar` — Encerra um sorteio antes do tempo',
-              '`/sorteio resorteio` — Sorteia novamente excluindo ganhadores anteriores',
+              '`/sorteio resorteio` — Novo sorteio excluindo ganhadores anteriores',
             ].join('\n'),
           },
           {
