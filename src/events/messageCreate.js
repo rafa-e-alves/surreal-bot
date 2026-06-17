@@ -5,32 +5,27 @@ const { enviarLog, embedLog } = require('../utils/logs');
 //  Configurações
 // ──────────────────────────────────────────────
 const CONFIG = {
-  // Antilink
   antilink: {
     ativo: true,
     regex: /https?:\/\/\S+|discord\.gg\/\S+|www\.\S+\.\S+/gi,
-    excecoes: [], // domínios permitidos (ex: ['redesurreal.com.br'])
+    excecoes: [],
   },
-
-  // Antispam — mensagens idênticas repetidas
   antispam: {
     ativo: true,
-    maxIguais: 3,      // máximo de mensagens idênticas
-    janela: 10_000,    // em ms (10 segundos)
+    maxIguais: 3,
+    janela: 10_000,
   },
-
-  // Antiflood — muitas mensagens em pouco tempo
   antiflood: {
     ativo: true,
-    maxMensagens: 5,   // máximo de mensagens
-    janela: 5_000,     // em ms (5 segundos)
+    maxMensagens: 5,
+    janela: 5_000,
   },
-
-  // Antirepeat — caracteres repetidos
   antirepeat: {
     ativo: true,
-    maxRepetidos: 15,  // máximo de caracteres iguais seguidos
+    maxRepetidos: 15,
   },
+  // Timeout ao punir (em segundos)
+  timeoutSegundos: 60,
 };
 
 // Cache em memória por usuário
@@ -60,11 +55,16 @@ async function punir(msg, motivo) {
   try {
     await msg.delete().catch(() => {});
 
+    // Aplica timeout no usuário
+    if (msg.member?.moderatable) {
+      await msg.member.timeout(CONFIG.timeoutSegundos * 1000, motivo).catch(() => {});
+    }
+
     const { EmbedBuilder } = require('discord.js');
     const embed = new EmbedBuilder()
       .setColor(0xFF0000)
       .setTitle('⚠️ AutoMod')
-      .setDescription(`${msg.author}, ${motivo}`)
+      .setDescription(`${msg.author}, ${motivo}\nVocê foi silenciado por **${CONFIG.timeoutSegundos} segundos**.`)
       .setFooter({ text: '⚔️ Rede Surreal' })
       .setTimestamp();
 
@@ -79,6 +79,7 @@ async function punir(msg, motivo) {
           { name: '👤 Usuário', value: `${msg.author}`, inline: true },
           { name: '📍 Canal', value: `${msg.channel}`, inline: true },
           { name: '📝 Motivo', value: motivo, inline: true },
+          { name: '⏱️ Timeout', value: `${CONFIG.timeoutSegundos}s`, inline: true },
           { name: '💬 Mensagem', value: msg.content.slice(0, 512) || '[vazia]', inline: false },
         ],
       })],
