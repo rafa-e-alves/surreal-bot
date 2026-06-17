@@ -67,7 +67,6 @@ module.exports = {
               '`/botinfo` — Informações sobre o bot',
               '`/serverinfo` — Informações sobre o servidor Discord',
               '`/userinfo` — Informações sobre um usuário',
-              '`/testar-entrada` — Simula a mensagem de boas-vindas (staff)',
             ].join('\n'),
           },
         ],
