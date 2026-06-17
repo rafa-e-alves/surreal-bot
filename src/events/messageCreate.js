@@ -24,7 +24,11 @@ const CONFIG = {
     ativo: true,
     maxRepetidos: 15,
   },
-  // Timeout ao punir (em segundos)
+  // Limite de tamanho de mensagem
+  antimasstext: {
+    ativo: true,
+    maxCaracteres: 500,
+  },
   timeoutSegundos: 60,
 };
 
@@ -104,6 +108,13 @@ module.exports = {
     const dados = getCache(msg.author.id);
     const agora = Date.now();
 
+    // ── Antimasstext — mensagem muito longa ────
+    if (CONFIG.antimasstext.ativo) {
+      if (conteudo.length > CONFIG.antimasstext.maxCaracteres) {
+        return punir(msg, `sua mensagem é muito longa. Limite de ${CONFIG.antimasstext.maxCaracteres} caracteres.`);
+      }
+    }
+
     // ── Antirepeat — caracteres repetidos ──────
     if (CONFIG.antirepeat.ativo) {
       const regex = new RegExp(`(.)\\1{${CONFIG.antirepeat.maxRepetidos},}`, 'i');
@@ -127,7 +138,8 @@ module.exports = {
     if (CONFIG.antiflood.ativo) {
       dados.mensagens = dados.mensagens.filter(t => agora - t < CONFIG.antiflood.janela);
       dados.mensagens.push(agora);
-      if (dados.mensagens.length > CONFIG.antiflood.maxMensagens) {
+      if (dados.mensagens.length >= CONFIG.antiflood.maxMensagens) {
+        dados.mensagens = []; // reseta pra não punir toda mensagem
         return punir(msg, `você está enviando mensagens muito rápido. Aguarde um momento.`);
       }
     }
