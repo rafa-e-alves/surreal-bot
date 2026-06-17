@@ -56,13 +56,19 @@ setInterval(() => {
 }, 30_000);
 
 // ──────────────────────────────────────────────
-async function punir(msg, motivo, detalhe = '') {
+async function punir(msg, motivo) {
   try {
     await msg.delete().catch(() => {});
 
-    const aviso = await msg.channel.send({
-      content: `⚠️ ${msg.author}, ${motivo}${detalhe ? ` ${detalhe}` : ''}`,
-    });
+    const { EmbedBuilder } = require('discord.js');
+    const embed = new EmbedBuilder()
+      .setColor(0xFF0000)
+      .setTitle('⚠️ AutoMod')
+      .setDescription(`${msg.author}, ${motivo}`)
+      .setFooter({ text: '⚔️ Rede Surreal' })
+      .setTimestamp();
+
+    const aviso = await msg.channel.send({ embeds: [embed] });
     setTimeout(() => aviso.delete().catch(() => {}), 5000);
 
     await enviarLog(msg.guild, 'CANAL_LOGS_MODERACAO', {
