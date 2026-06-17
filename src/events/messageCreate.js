@@ -41,7 +41,7 @@ const cache = new Map();
 
 function getCache(userId) {
   if (!cache.has(userId)) {
-    cache.set(userId, { mensagens: [], ultimasMsgs: [], infrações: 0 });
+    cache.set(userId, { mensagens: [], ultimasMsgs: [], infrações: 0, ultimaPunicao: 0 });
   }
   return cache.get(userId);
 }
@@ -59,6 +59,12 @@ setInterval(() => {
 async function punir(msg, motivo) {
   try {
     const dados = getCache(msg.author.id);
+    const agora2 = Date.now();
+
+    // Evita punir o mesmo usuário duas vezes em menos de 3 segundos
+    if (agora2 - dados.ultimaPunicao < 3000) return;
+    dados.ultimaPunicao = agora2;
+
     const nivel = Math.min(dados.infrações, CONFIG.punicoes.length - 1);
     const punicao = CONFIG.punicoes[nivel];
     dados.infrações++;
