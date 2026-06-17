@@ -10,11 +10,11 @@ module.exports = {
         cor: 0xED4245,
         titulo: '📤 Membro Saiu',
         fields: [
-          { name: '👤 Usuário', value: `${member.user} \`(${member.user.tag})\``, inline: true },
+          { name: '👤 Usuário', value: `${member.user}`, inline: true },
           { name: '🆔 ID', value: `\`${member.id}\``, inline: true },
           { name: '📅 Entrou em', value: `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`, inline: true },
-          { name: '👥 Total de membros', value: `\`${member.guild.memberCount}\``, inline: true },
         ],
+        footer: `⚔️ Rede Surreal • ${member.guild.memberCount} membros`,
       })],
     });
 

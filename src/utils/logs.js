@@ -24,7 +24,7 @@ async function enviarLog(guild, envKey, opcoes) {
 /**
  * Cria um embed de log padronizado
  */
-function embedLog({ cor, titulo, fields = [], descricao = null, timestamp = true }) {
+function embedLog({ cor, titulo, fields = [], descricao = null, timestamp = true, footer = null }) {
   const embed = new EmbedBuilder()
     .setColor(cor)
     .setTitle(titulo);
@@ -32,7 +32,7 @@ function embedLog({ cor, titulo, fields = [], descricao = null, timestamp = true
   if (descricao) embed.setDescription(descricao);
   if (fields.length > 0) embed.addFields(fields);
   if (timestamp) embed.setTimestamp();
-  embed.setFooter({ text: '⚔️ Rede Surreal' });
+  embed.setFooter({ text: footer ?? '⚔️ Rede Surreal' });
 
   return embed;
 }

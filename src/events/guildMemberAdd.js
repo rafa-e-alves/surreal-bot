@@ -21,11 +21,11 @@ module.exports = {
         cor: 0x57F287,
         titulo: '📥 Membro Entrou',
         fields: [
-          { name: '👤 Usuário', value: `${member} \`(${member.user.tag})\``, inline: true },
+          { name: '👤 Usuário', value: `${member}`, inline: true },
           { name: '🆔 ID', value: `\`${member.id}\``, inline: true },
           { name: '📅 Conta criada', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true },
-          { name: '👥 Total de membros', value: `\`${member.guild.memberCount}\``, inline: true },
         ],
+        footer: `⚔️ Rede Surreal • ${member.guild.memberCount} membros`,
       })],
     });
 
