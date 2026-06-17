@@ -73,18 +73,18 @@ async function punir(msg, motivo) {
     const punicao = CONFIG.punicoes[nivel];
     dados.infrações++;
 
-    // Apaga mensagens recentes do usuário no canal (últimas 14 dias)
+    // Apaga mensagens recentes do usuário no canal
     try {
       const msgs = await msg.channel.messages.fetch({ limit: 50 });
       const doUsuario = [...msgs.values()]
-        .filter(m => m.author.id === msg.author.id &&
-          Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000)
+        .filter(m => m.author.id === msg.author.id)
         .slice(0, 10);
 
-      if (doUsuario.length === 1) {
-        await doUsuario[0].delete().catch(() => {});
-      } else if (doUsuario.length > 1) {
-        await msg.channel.bulkDelete(doUsuario, true).catch(() => {});
+      if (!doUsuario.find(m => m.id === msg.id)) doUsuario.push(msg);
+
+      for (const m of doUsuario) {
+        await m.delete().catch(() => {});
+        await new Promise(r => setTimeout(r, 150));
       }
     } catch {
       await msg.delete().catch(() => {});
