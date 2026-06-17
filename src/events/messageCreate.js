@@ -66,8 +66,6 @@ async function punir(msg, motivo) {
       dados.infrações = 0;
     }
 
-    // Evita punir o mesmo usuário duas vezes em menos de 3 segundos
-    if (agora2 - dados.ultimaPunicao < 3000) return;
     dados.ultimaPunicao = agora2;
     dados.ultimaInfracao = agora2;
 
@@ -75,16 +73,20 @@ async function punir(msg, motivo) {
     const punicao = CONFIG.punicoes[nivel];
     dados.infrações++;
 
-    // Apaga a mensagem atual + mensagens recentes do usuário no canal (últimas 10)
-    const msgs = await msg.channel.messages.fetch({ limit: 50 }).catch(() => null);
-    if (msgs) {
+    // Apaga mensagens recentes do usuário no canal (últimas 14 dias)
+    try {
+      const msgs = await msg.channel.messages.fetch({ limit: 50 });
       const doUsuario = [...msgs.values()]
-        .filter(m => m.author.id === msg.author.id)
+        .filter(m => m.author.id === msg.author.id &&
+          Date.now() - m.createdTimestamp < 14 * 24 * 60 * 60 * 1000)
         .slice(0, 10);
-      for (const m of doUsuario) {
-        await m.delete().catch(() => {});
+
+      if (doUsuario.length === 1) {
+        await doUsuario[0].delete().catch(() => {});
+      } else if (doUsuario.length > 1) {
+        await msg.channel.bulkDelete(doUsuario, true).catch(() => {});
       }
-    } else {
+    } catch {
       await msg.delete().catch(() => {});
     }
 
@@ -139,6 +141,9 @@ module.exports = {
 
     const dados = getCache(msg.author.id);
     const agora = Date.now();
+
+    // Cooldown global — ignora se já foi punido nos últimos 3s
+    if (agora - dados.ultimaPunicao < 3000) return;
 
     // ── Antimasstext — mensagem muito longa ────
     if (CONFIG.antimasstext.ativo) {
