@@ -30,9 +30,9 @@ const CONFIG = {
   },
   // Punição progressiva
   punicoes: [
-    { timeout: 60,        descricao: '60 segundos' },
-    { timeout: 300,       descricao: '5 minutos'   },
-    { semFala: true,      descricao: 'permanente — permissão de fala removida' },
+    { timeout: 60,          descricao: '60 segundos' },
+    { timeout: 300,         descricao: '5 minutos'   },
+    { timeout: 28*24*3600,  descricao: 'permanente (28 dias)' },
   ],
 };
 
@@ -90,16 +90,12 @@ async function punir(msg, motivo) {
 
     // Aplica punição
     let descPunicao = '';
-    if (punicao.semFala) {
-      // Remove permissão de fala permanentemente
-      await msg.channel.permissionOverwrites.edit(msg.member, {
-        SendMessages: false,
-      }).catch(() => {});
-      descPunicao = '🔇 Permissão de fala removida permanentemente neste canal.';
-    } else {
-      await msg.member.timeout(punicao.timeout * 1000, motivo).catch(() => {});
-      descPunicao = `⏱️ Silenciado por **${punicao.descricao}**.`;
-    }
+    const isPermanente = nivel === CONFIG.punicoes.length - 1;
+
+    await msg.member.timeout(punicao.timeout * 1000, motivo).catch(() => {});
+    descPunicao = isPermanente
+      ? `🔇 Você foi silenciado permanentemente. Entre em contato com a staff.`
+      : `⏱️ Silenciado por **${punicao.descricao}**.`;
 
     const embed = new EmbedBuilder()
       .setColor(0xFF0000)
@@ -113,8 +109,8 @@ async function punir(msg, motivo) {
 
     await enviarLog(msg.guild, 'CANAL_LOGS_MODERACAO', {
       embeds: [embedLog({
-        cor: 0xFEE75C,
-        titulo: '⚠️ AutoMod',
+        cor: isPermanente ? 0xFF0000 : 0xFEE75C,
+        titulo: isPermanente ? '🔇 Mute Permanente — AutoMod' : '⚠️ AutoMod',
         fields: [
           { name: '👤 Usuário', value: `${msg.author}`, inline: true },
           { name: '📍 Canal', value: `${msg.channel}`, inline: true },
@@ -132,6 +128,7 @@ async function punir(msg, motivo) {
 // ──────────────────────────────────────────────
 module.exports = {
   name: Events.MessageCreate,
+  cache, // exporta pra o /unmute poder resetar infrações
   async execute(msg) {
     if (!msg.guild) return;
     if (msg.author.bot) return;
