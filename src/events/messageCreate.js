@@ -1,4 +1,4 @@
-const { Events, PermissionFlagsBits } = require('discord.js');
+const { Events, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const { enviarLog, embedLog } = require('../utils/logs');
 
 // ──────────────────────────────────────────────
@@ -24,12 +24,16 @@ const CONFIG = {
     ativo: true,
     maxRepetidos: 15,
   },
-  // Limite de tamanho de mensagem
   antimasstext: {
     ativo: true,
     maxCaracteres: 500,
   },
-  timeoutSegundos: 60,
+  // Punição progressiva
+  punicoes: [
+    { timeout: 60,        descricao: '60 segundos' },
+    { timeout: 300,       descricao: '5 minutos'   },
+    { semFala: true,      descricao: 'permanente — permissão de fala removida' },
+  ],
 };
 
 // Cache em memória por usuário
@@ -37,38 +41,58 @@ const cache = new Map();
 
 function getCache(userId) {
   if (!cache.has(userId)) {
-    cache.set(userId, { mensagens: [], ultimasMsgs: [] });
+    cache.set(userId, { mensagens: [], ultimasMsgs: [], infrações: 0 });
   }
   return cache.get(userId);
 }
 
-// Limpa cache antigo a cada 30s
+// Limpa cache antigo a cada 30s (mas mantém infrações)
 setInterval(() => {
   const agora = Date.now();
   for (const [id, dados] of cache.entries()) {
     dados.mensagens = dados.mensagens.filter(t => agora - t < 30_000);
     dados.ultimasMsgs = dados.ultimasMsgs.filter(m => agora - m.t < 30_000);
-    if (dados.mensagens.length === 0 && dados.ultimasMsgs.length === 0) {
-      cache.delete(id);
-    }
   }
 }, 30_000);
 
 // ──────────────────────────────────────────────
 async function punir(msg, motivo) {
   try {
-    await msg.delete().catch(() => {});
+    const dados = getCache(msg.author.id);
+    const nivel = Math.min(dados.infrações, CONFIG.punicoes.length - 1);
+    const punicao = CONFIG.punicoes[nivel];
+    dados.infrações++;
 
-    // Aplica timeout no usuário
-    if (msg.member?.moderatable) {
-      await msg.member.timeout(CONFIG.timeoutSegundos * 1000, motivo).catch(() => {});
+    // Apaga a mensagem atual + mensagens recentes do usuário no canal (últimas 10)
+    const msgs = await msg.channel.messages.fetch({ limit: 50 }).catch(() => null);
+    if (msgs) {
+      const doUsuario = [...msgs.values()]
+        .filter(m => m.author.id === msg.author.id)
+        .slice(0, 10);
+      for (const m of doUsuario) {
+        await m.delete().catch(() => {});
+      }
+    } else {
+      await msg.delete().catch(() => {});
     }
 
-    const { EmbedBuilder } = require('discord.js');
+    // Aplica punição
+    let descPunicao = '';
+    if (punicao.semFala) {
+      // Remove permissão de fala permanentemente
+      await msg.channel.permissionOverwrites.edit(msg.member, {
+        SendMessages: false,
+      }).catch(() => {});
+      descPunicao = '🔇 Permissão de fala removida permanentemente neste canal.';
+    } else {
+      await msg.member.timeout(punicao.timeout * 1000, motivo).catch(() => {});
+      descPunicao = `⏱️ Silenciado por **${punicao.descricao}**.`;
+    }
+
     const embed = new EmbedBuilder()
       .setColor(0xFF0000)
       .setTitle('⚠️ AutoMod')
-      .setDescription(`${msg.author}, ${motivo}\nVocê foi silenciado por **${CONFIG.timeoutSegundos} segundos**.`)
+      .setDescription(`${msg.author}, ${motivo}\n${descPunicao}\n\n*Aviso ${dados.infrações} de ${CONFIG.punicoes.length}*`)
       .setFooter({ text: '⚔️ Rede Surreal' })
       .setTimestamp();
 
@@ -83,8 +107,8 @@ async function punir(msg, motivo) {
           { name: '👤 Usuário', value: `${msg.author}`, inline: true },
           { name: '📍 Canal', value: `${msg.channel}`, inline: true },
           { name: '📝 Motivo', value: motivo, inline: true },
-          { name: '⏱️ Timeout', value: `${CONFIG.timeoutSegundos}s`, inline: true },
-          { name: '💬 Mensagem', value: msg.content.slice(0, 512) || '[vazia]', inline: false },
+          { name: '⚠️ Nível', value: `${dados.infrações}/${CONFIG.punicoes.length}`, inline: true },
+          { name: '⏱️ Punição', value: punicao.descricao, inline: true },
         ],
       })],
     });
@@ -97,7 +121,6 @@ async function punir(msg, motivo) {
 module.exports = {
   name: Events.MessageCreate,
   async execute(msg) {
-    // Ignora bots, DMs e quem tem permissão de gerenciar mensagens
     if (!msg.guild) return;
     if (msg.author.bot) return;
     if (msg.member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
@@ -139,8 +162,8 @@ module.exports = {
       dados.mensagens = dados.mensagens.filter(t => agora - t < CONFIG.antiflood.janela);
       dados.mensagens.push(agora);
       if (dados.mensagens.length >= CONFIG.antiflood.maxMensagens) {
-        dados.mensagens = []; // reseta pra não punir toda mensagem
-        return punir(msg, `você está enviando mensagens muito rápido. Aguarde um momento.`);
+        dados.mensagens = [];
+        return punir(msg, `você está enviando mensagens muito rápido.`);
       }
     }
 
@@ -150,7 +173,7 @@ module.exports = {
       dados.ultimasMsgs.push({ t: agora, c: conteudo.toLowerCase().trim() });
       const iguais = dados.ultimasMsgs.filter(m => m.c === conteudo.toLowerCase().trim());
       if (iguais.length >= CONFIG.antispam.maxIguais) {
-        dados.ultimasMsgs = []; // reseta pra não punir infinitamente
+        dados.ultimasMsgs = [];
         return punir(msg, `pare de enviar mensagens repetidas.`);
       }
     }
